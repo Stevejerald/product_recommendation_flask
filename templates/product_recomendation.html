@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Recommendations</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product_recomendation.css') }}">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Sales Data - Product Recommendations</h2>
+
+            <!-- Display flash messages -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <!-- File Upload Form -->
+            <form action="/" method="post" enctype="multipart/form-data" class="text-center">
+                <div class="form-group">
+                    <label for="file" class="font-weight-bold">Upload Sales Data (CSV):</label>
+                    <input type="file" name="file" id="file" class="form-control-file" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg mt-3">Upload and Generate Recommendations</button>
+            </form>
+
+            <!-- Recommendations Section -->
+            {% if recommendations %}
+                <h3 class="mt-5">Top Product Recommendations</h3>
+                <ul class="list-group mt-3">
+                    {% for rec in recommendations %}
+                        <li class="list-group-item">
+                            <strong>{{ rec.rule }}</strong><br>
+                            <strong>Predicted Sales Accuracy:</strong> {{ rec.confidence }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
